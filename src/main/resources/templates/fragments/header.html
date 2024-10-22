@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!--179 시큐리티 적용 코드 -->
+
+<div th:fragment="header">
+    <!--   다른페이지에 포함시킬 영역을 th:fragment 로 선언    -->
+    <!--   사용은 layouts/layout1.html 파일에서  <div th:replace="~{fragments/header::header}"></div>     -->
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+        <!-- 부트스트랩doc에 있는 네비 관련 코드를 활용하여 메뉴 구현        -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/">Shop</a>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                    <!-- ADMIN 룰을 가지고 있으면 사용 가능                   -->
+                    <a class="nav-link" href="/admin/item/new">상품 등록</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                    <!-- ADMIN 룰을 가지고 있으면 사용 가능                   -->
+                    <a class="nav-link" href="/admin/items">상품 관리</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <!-- 로그인 룰을 가지고 있으면 사용 가능                   -->
+                    <a class="nav-link" href="/cart">장바구니</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <!-- 로그인 룰을 가지고 있으면 사용 가능                   -->
+                    <a class="nav-link" href="/orders">구매이력</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <!-- 로그인 안된 룰을 가지고 있으면 사용 가능                   -->
+                    <a class="nav-link" href="/members/login">로그인</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <!-- 로그인 룰을 가지고 있으면 사용 가능                   -->
+
+                    <a class="nav-link" href="/members/logout">로그아웃</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" th:action="@{/}" method="get">
+                <input name="searchQuery" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+</div>
+
+</html>

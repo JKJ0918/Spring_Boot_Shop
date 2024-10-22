@@ -1,0 +1,96 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+plugins {
+    id 'java'
+    id 'war'
+    id 'org.springframework.boot' version '3.2.10'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'org.zerock'
+version = '0.0.1-SNAPSHOT'
+
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'  // 테스트용 추가
+    testAnnotationProcessor 'org.projectlombok:lombok'   // 테스트용 추가
+    // 테스트용 db H2로 활용 https://mvnrepository.com/artifact/org.eclipse.dirigible/dirigible-database-h2
+    implementation group: 'org.eclipse.dirigible', name: 'dirigible-database-h2', version: '10.2.10'
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.4'
+
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // 모델 처리를 위한 라이브러리 (DTO와 엔티티간의 변환 처리용) -> config.RootConfig에 적용
+    implementation 'org.modelmapper:modelmapper:3.1.0'
+    // 레이아웃 기능을 위한 라이브러리 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" html 추가 필수
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
+    // 타입리프 용 코드
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
+
+
+    annotationProcessor(
+            "jakarta.persistence:jakarta.persistence-api",
+            "jakarta.annotation:jakarta.annotation-api",
+            "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
+
+    // 스프링 시큐리티 시작용
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // 부트 3이상 부터는 6 사용 함 https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity6
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+
+    testImplementation("org.springframework.security:spring-security-test") // 시큐리티 테스트
+
+
+    // 외부 인증용 카카오, 구글,  네이버 등....
+    //implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // 카카오톡 참고 https://developers.kakao.com/docs/latest/ko/kakaologin/common
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+sourceSets {
+
+    main {
+        java {
+            srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
+        }
+    }
+}
+
+
+compileJava.dependsOn('clean')

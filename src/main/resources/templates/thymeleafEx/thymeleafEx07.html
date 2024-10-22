@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout1}">
+<!-- layout.layout.html을 기본 레이아웃으로 채용  -->
+
+<div layout:fragment="content">
+    <!--  레이아웃 조각 생성 :  content 이름으로 활용 -->
+    <!--   layout.layout.html에 content부분을 치환하여 사용  -->
+    <!--   <div layout:fragment="content" class="content">에 들어가는 영역 -->
+    본문 영역 입니다.
+</div>
+
+</html>
